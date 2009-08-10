@@ -21,16 +21,30 @@ $db->query("insert into users (id, key, secret) values ('$code', '". $tok['oauth
 <html>
 <head>
 <title>ALIXSYS twitter registration</title>
+<style>
+body {
+	background-color: #4a7428; 
+}
+li {
+	color: white; 
+	font-size: 48pt;
+	font-family: "fixed";
+	margin-left: 10px;
+}
+li span {
+	font-size: 12pt;
+}
+</style>
 </head>
 <body>
 <center>
-<img src="../gif/AliXsys-logo-32x32.gif" />
+<img src="../png/AliXsys-identite.png" />
 </center>
 <ol>
-	<li>Grab your mobile</li>
-	<li>Go to <i>http://twitter.alixsys.com</i> and enter this code : <b><?php print $code ?></b></li>
-	<li>Bookmark the status update page</li>
-	<li>Update your status FTW!</li>
+	<li><span>Grab your mobile</span></li>
+	<li><span>Go to <i>http://twitter.alixsys.com</i> and enter this code : <b><?php print $code ?></b></span></li>
+	<li><span>Bookmark the status update page</span></li>
+	<li><span>Update your status FTW!</span></li>
 </ol>
 </body>
 </html>
