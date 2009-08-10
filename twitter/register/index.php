@@ -34,15 +34,18 @@ li {
 li span {
 	font-size: 12pt;
 }
+li span i, li span b {
+	background-color: black;
+}
 </style>
 </head>
 <body>
-<center>
-<img src="../png/AliXsys-identite.png" />
+<center style="margin-bottom: 100px">
+<a href="http://alixsys.com"><img src="../png/AliXsys-identite.png" border="0" /></a>
 </center>
 <ol>
 	<li><span>Grab your mobile</span></li>
-	<li><span>Go to <i>http://twitter.alixsys.com</i> and enter this code : <b><?php print $code ?></b></span></li>
+	<li><span>Go to <b>http://twitter.alixsys.com</b> and enter this code : <b><?php print $code ?></b></span></li>
 	<li><span>Bookmark the status update page</span></li>
 	<li><span>Update your status FTW!</span></li>
 </ol>

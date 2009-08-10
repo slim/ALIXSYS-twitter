@@ -3,14 +3,15 @@
 	$consumer_key = 'JCJZwzwdpgwLKbg3DBtmA';
 	$consumer_secret = 'PmLAZEuyRFOCuh5qLb7aYvQOTpgeFcwQdTfjOdN64c';
 
-	$to = new TwitterOAuth($consumer_key, $consumer_secret, $_GET['k'], $_GET['s']);
-	$to->OAuthRequest('https://twitter.com/statuses/update.xml', array('status' => $_GET['status']), 'POST');
+$status = stripslashes($_GET['status']);
+$to = new TwitterOAuth($consumer_key, $consumer_secret, $_GET['k'], $_GET['s']);
+$to->OAuthRequest('https://twitter.com/statuses/update.xml', array('status' => $status), 'POST');
 ?>
 <html>
 <head>
-<title><?php print $_GET['status'] ?></title>
+<title><?php print $status ?></title>
 </head>
 <body>
-Your status is now : <?php print $_GET['status'] ?>
+Your status is now : <br><b><?php print $status ?></b>
 </body>
 </html>
