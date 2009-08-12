@@ -1,0 +1,9 @@
+URI: index
+
+URI: index.php
+Content-type: application/x-httpd-php
+Content-language: en
+
+URI: index.fr.php
+Content-type: application/x-httpd-php
+Content-language: fr, en

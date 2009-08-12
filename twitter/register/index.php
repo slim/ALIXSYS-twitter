@@ -4,6 +4,7 @@
 	$db = new PDO($conf['db']);
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+	
 session_start();
 if (!$_GET['oauth_token']) {
 	$to = new TwitterOAuth($conf['consumer_key'], $conf['consumer_secret']);
@@ -17,6 +18,10 @@ $to = new TwitterOAuth($conf['consumer_key'], $conf['consumer_secret'], $_SESSIO
 $tok = $to->getAccessToken();
 $code = uniqid();
 $db->query("insert into users (id, key, secret) values ('$code', '". $tok['oauth_token'] ."', '". $tok['oauth_token_secret'] ."')");
+if (strpos($_SERVER['HTTP_ACCEPT_LANGUAGE'], 'fr') !== FALSE) {
+	require "index.fr.php";
+	die();
+}
 ?>
 <html>
 <head>
