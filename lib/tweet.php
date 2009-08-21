@@ -28,4 +28,10 @@ class Tweet
 
 		return self::$db->query("insert into $table (id, time, friend, status) values ('$id', '$time', '$friend', '$status');");
 	}
+
+	static function create_table()
+	{
+		$table = self::$table;
+		return self::$db->query("create table if not exists $table (id primary key, ord, time, friend, status, isRead);");
+	}
 }
