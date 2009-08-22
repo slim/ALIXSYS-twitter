@@ -15,8 +15,8 @@ class Tweet
 	{
 		$this->friend = $data->screen_name;
 		$this->status = $data->status->text;
-		$this->id = $data->id . $data->status->id;
 		$this->time = date('c', strtotime($data->status->created_at));
+		$this->id = md5($this->status . $this->time);
 	}
 
 	function save()
@@ -33,15 +33,12 @@ class Tweet
 	static function load_friends()
 	{
 		$data = json_decode(self::$twitter->OAuthRequest('https://twitter.com/statuses/friends.json', NULL, 'GET'));
-		$expire_time = time() - (24*60*60);
 		$tweets = array();
 		foreach ($data as $t) {
 			$tweet_time = strtotime($t->status->created_at);
-			if ($tweet_time > $expire_time) {
-				$tweets[$tweet_time] = new Tweet($t);
-			}
+			$tweets[$tweet_time] = new Tweet($t);
 		}
-		ksort($tweets);
+		krsort($tweets);
 
 		return $tweets;
 	}
