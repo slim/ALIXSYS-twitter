@@ -11,12 +11,14 @@ class Tweet
 	public $friend;
 	public $status;
 
-	function __construct($data)
+	function __construct($data = NULL)
 	{
-		$this->friend = $data->screen_name;
-		$this->status = $data->status->text;
-		$this->time = date('c', strtotime($data->status->created_at));
-		$this->id = md5($this->status . $this->time);
+		if ($data) {
+			$this->friend = $data->screen_name;
+			$this->status = $data->status->text;
+			$this->time = date('c', strtotime($data->status->created_at));
+			$this->id = md5($this->status . $this->time);
+		}
 	}
 
 	function save()
@@ -27,18 +29,60 @@ class Tweet
 		$friend = $this->friend;
 		$status = sqlite_escape_string($this->status);
 
-		return self::$db->query("insert into $table (id, time, friend, status, isRead) values ('$id', '$time', '$friend', '$status', 'yes');");
+		return self::$db->query("insert into $table (id, time, friend, status, isRead) values ('$id', '$time', '$friend', '$status', 'no');");
 	}
 
-	static function load_friends()
+	function mark_as_read()
 	{
-		$data = json_decode(self::$twitter->OAuthRequest('https://twitter.com/statuses/friends.json', NULL, 'GET'));
+		$table = self::$table;
+		$id = $this->id;
+		$query = "update $table set isRead='yes' where id='$id';";
+		return self::$db->query($query);
+	}
+
+	static function mark_all_as_read()
+	{
+		$table = self::$table;
+		$query = "update $table set isRead='yes';";
+		return self::$db->query($query);
+	}
+
+	static function select($options)
+	{
+		$tweets = array();
+		$table = self::$table;
+
+		$result = self::$db->query("select * from $table $options;");
+		foreach ($result as $row) {
+			$t = new Tweet;
+			$t->id = $row['id'];
+			$t->time = $row['time'];
+			$t->friend = $row['friend'];
+			$t->status = $row['status'];
+			array_push($tweets, $t);
+		}
+
+		return $tweets;
+	}
+
+	static function first_unread()
+	{
+		list($tweet) = self::select("where isRead <> 'yes' order by rowid");
+		return $tweet;
+	}
+
+	static function load_friends($page = 1)
+	{
+		$data = json_decode(self::$twitter->OAuthRequest('https://twitter.com/statuses/friends.json', array('page' => $page), 'GET'));
 		$tweets = array();
 		foreach ($data as $t) {
 			$tweet_time = strtotime($t->status->created_at);
 			$tweets[$tweet_time] = new Tweet($t);
 		}
 		krsort($tweets);
+		foreach($tweets as $tweet) {
+			$tweet->save();
+		}
 
 		return $tweets;
 	}

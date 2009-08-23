@@ -6,31 +6,46 @@
 	//Tweet::$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 	Tweet::$twitter = new TwitterOAuth($conf['consumer_key'], $conf['consumer_secret'], $_GET['k'], $_GET['s']);
 
-if ($_GET['n']) {
+if ($_GET['n'] && $_GET['p']) {
 	Tweet::$table = "timeline_". $_GET['n'];
 	$here = $_SERVER['PHP_SELF'] ."?". $_SERVER['QUERY_STRING'];
+	$page = $_GET['p'];
 }
 else {
 	$user_name = Tweet::user_identity()->screen_name;
-	$here = $_SERVER['PHP_SELF'] ."?n=$user_name&". $_SERVER['QUERY_STRING'];
+	$here = $_SERVER['PHP_SELF'] ."?n=$user_name&p=1&". $_SERVER['QUERY_STRING'];
 	Tweet::$table = "timeline_$user_name";
 	Tweet::create_table();
 	header("Location: $here");
 	die();
 }
 
-$tweets = Tweet::load_friends();
-foreach($tweets as $tweet) {
-	if ($tweet->save()) break;
+$tweet = Tweet::first_unread();
+if ($_GET['fresh'] || !$tweet instanceof Tweet) {
+	Tweet::mark_all_as_read();
+	if (sizeof(Tweet::load_friends($page)) < 100) {
+		$page = 1;
+	}
+	else {
+		$page++;
+	}
+	$tweet = Tweet::first_unread();
 }
 
+$next_url =  $_SERVER['PHP_SELF'] ."?n=". $_GET['n'] ."&p=". $page ."&k=". $_GET['k'] ."&s=". $_GET['s'];
 
 header("Cache-Control: no-cache, must-revalidate");
 header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
+
+if (!$tweet instanceof Tweet) {
+	die("<html><head><title>tweeps</title></head><body><b>Nothing happened :)</b><br><a href='$next_url&fresh=1'>Fresh tweets</a></body></html>");
+}
 
 $name = $tweet->friend;
 $status = $tweet->status;
 $date = date('Y.m.d H:m', strtotime($tweet->time));
 
-print "<html><head><title>tweeps</title></head><body><b>$name</b><br> $status<br><br>$date<br><a href='$here'>Next</a></body></html>";
+$tweet->mark_as_read();
+
+print "<html><head><title>tweeps</title></head><body><b>$name</b><br> $status<br><br>$date<br><a href='$next_url'>Next</a><br><a href='$next_url&fresh=1'>Fresh tweets</a></body></html>";
 
