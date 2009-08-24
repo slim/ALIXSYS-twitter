@@ -12,7 +12,7 @@
 <input name="s" type="hidden" value="<?php print $_GET['s'] ?>"/>
 <input name="status" type="text" />
 <input type="submit" value="update" />
-<!-- &nbsp;&nbsp;<a href="<?php print $myfriends ?>">Friends</a> -->
+&nbsp;&nbsp;<a href="<?php print $myfriends ?>">Friends</a>
 <p>tip: bookmark this page</p>
 </form>
 </body>
