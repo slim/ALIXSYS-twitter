@@ -23,7 +23,8 @@ else {
 $tweet = Tweet::first_unread();
 if ($_GET['fresh'] || !$tweet instanceof Tweet) {
 	Tweet::mark_all_as_read();
-	if (sizeof(Tweet::load_friends($page)) < 100) {
+	$nbr_friends = count(Tweet::load_friends($page));
+	if ($nbr_friends < 98) {
 		$page = 1;
 	}
 	else {
