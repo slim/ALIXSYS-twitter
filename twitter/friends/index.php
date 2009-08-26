@@ -50,5 +50,5 @@ $date = date('Y.m.d H:m', strtotime($tweet->time));
 $tweet->mark_as_read();
 $status_enc = urlencode($status);
 
-print "<html><head><title>tweeps</title></head><body><b>$name</b><br> $status<br><br>$date<br><a href='$next_url'>Next</a><br><a href='$status_url&status=RT @$name $status_enc'>Retweet</a><br><a href='$next_url&fresh=1'>Fresh tweets</a></body></html>";
+print "<html><head><title>tweeps</title></head><body><b>$name</b><br> $status<br><br>$date<br><a href='$next_url'>Next</a><br><a href='$status_url&status=@$name '>Reply</a><br><a href='$status_url&status=RT @$name $status_enc'>Retweet</a><br><a href='$next_url&fresh=1'>Fresh tweets</a></body></html>";
 
