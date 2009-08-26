@@ -34,6 +34,7 @@ if ($_GET['fresh'] || !$tweet instanceof Tweet) {
 }
 
 $next_url =  $_SERVER['PHP_SELF'] ."?n=". $_GET['n'] ."&p=". $page ."&k=". $_GET['k'] ."&s=". $_GET['s'];
+$status_url = $conf['status_url'] ."?k=". $_GET['k'] ."&s=". $_GET['s'];
 
 header("Cache-Control: no-cache, must-revalidate");
 header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
@@ -47,6 +48,7 @@ $status = $tweet->status;
 $date = date('Y.m.d H:m', strtotime($tweet->time));
 
 $tweet->mark_as_read();
+$status_enc = urlencode($status);
 
-print "<html><head><title>tweeps</title></head><body><b>$name</b><br> $status<br><br>$date<br><a href='$next_url'>Next</a><br><a href='$next_url&fresh=1'>Fresh tweets</a></body></html>";
+print "<html><head><title>tweeps</title></head><body><b>$name</b><br> $status<br><br>$date<br><a href='$next_url'>Next</a><br><a href='$status_url&status=RT @$name $status_enc'>Retweet</a><br><a href='$next_url&fresh=1'>Fresh tweets</a></body></html>";
 
