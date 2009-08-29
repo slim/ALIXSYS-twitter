@@ -13,6 +13,7 @@ if ($_GET['n'] && $_GET['p']) {
 }
 else {
 	$user_name = Tweet::user_identity()->screen_name;
+	if (!$user_name) die("Sorry, I don't know who you are.");
 	$here = $_SERVER['PHP_SELF'] ."?n=$user_name&p=1&". $_SERVER['QUERY_STRING'];
 	Tweet::$table = "timeline_$user_name";
 	Tweet::create_table();
@@ -23,10 +24,14 @@ else {
 $tweet = Tweet::first_unread();
 if ($_GET['fresh'] || !$tweet instanceof Tweet) {
 	Tweet::mark_all_as_read();
-	$page++;
-	$nbr_friends = count(Tweet::load_friends($page));
-	if ($nbr_friends < 98) {
-		$page = 1;
+	Tweet::load_replies();
+	$tweet = Tweet::first_unread();
+	if (!$tweet instanceof Tweet) {
+		$page++;
+		$nbr_friends = count(Tweet::load_friends($page));
+		if ($nbr_friends < 98) {
+			$page = 1;
+		}
 	}
 	$tweet = Tweet::first_unread();
 }

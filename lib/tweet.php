@@ -14,10 +14,18 @@ class Tweet
 	function __construct($data = NULL)
 	{
 		if ($data) {
-			$this->friend = $data->screen_name;
-			$this->status = $data->status->text;
-			$this->time = date('c', strtotime($data->status->created_at));
-			$this->id = md5($this->status . $this->time);
+			if ($data->user) {
+				$this->friend = $data->user->screen_name;
+				$this->status = $data->text;
+				$this->time = date('c', strtotime($data->created_at));
+				$this->id = md5($this->status . $this->time);
+			}
+			else {
+				$this->friend = $data->screen_name;
+				$this->status = $data->status->text;
+				$this->time = date('c', strtotime($data->status->created_at));
+				$this->id = md5($this->status . $this->time);
+			}
 		}
 	}
 
@@ -67,17 +75,25 @@ class Tweet
 
 	static function first_unread()
 	{
-		list($tweet) = self::select("where isRead <> 'yes' order by rowid");
+		list($tweet) = self::select("where isRead <> 'yes' order by rowid limit 1");
 		return $tweet;
 	}
 
-	static function load_friends($page = 1)
+	static function last_by_time()
 	{
-		$data = json_decode(self::$twitter->OAuthRequest('https://twitter.com/statuses/friends.json', array('page' => $page), 'GET'));
+		list($tweet) = self::select("order by time desc limit 1");
+		return $tweet;
+	}
+
+	static function load($data, $expiration = NULL)
+	{
 		$tweets = array();
 		foreach ($data as $t) {
-			$tweet_time = strtotime($t->status->created_at);
-			$tweets[$tweet_time] = new Tweet($t);
+			$tweet = new Tweet($t);
+			$tweet_time = strtotime($tweet->time);
+			if ($tweet_time > strtotime($expiration)) {
+				$tweets[$tweet_time] = $tweet;
+			}
 		}
 		krsort($tweets);
 		foreach($tweets as $tweet) {
@@ -85,6 +101,25 @@ class Tweet
 		}
 
 		return $tweets;
+	}
+
+	static function load_friends($page = 1)
+	{
+		$data = json_decode(self::$twitter->OAuthRequest('https://twitter.com/statuses/friends.json', array('page' => $page), 'GET'));
+		return Tweet::load($data);
+	}
+
+	static function load_replies()
+	{
+		$last_tweet = self::last_by_time();
+		$data = json_decode(self::$twitter->OAuthRequest('https://twitter.com/statuses/mentions.json', array(), 'GET'));
+		return Tweet::load($data, $last_tweet->time);
+	}
+
+	static function load_user($tweep)
+	{
+		$data = json_decode(self::$twitter->OAuthRequest('https://twitter.com/statuses/user_timeline.json', array('screen_name' => $tweep), 'GET'));
+		return Tweet::load($data);
 	}
 
 	static function user_identity()
