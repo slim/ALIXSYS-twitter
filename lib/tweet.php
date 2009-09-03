@@ -7,6 +7,7 @@ class Tweet
 	static $table;
 
 	public $id;
+	public $position;
 	public $time;
 	public $friend;
 	public $status;
@@ -55,15 +56,21 @@ class Tweet
 		return self::$db->query($query);
 	}
 
+	static function sql_select($options)
+	{
+		$table = self::$table;
+		return "select rowid, * from $table $options;";
+	}
+
 	static function select($options)
 	{
 		$tweets = array();
-		$table = self::$table;
 
-		$result = self::$db->query("select * from $table $options;");
+		$result = self::$db->query(self::sql_select($options));
 		foreach ($result as $row) {
 			$t = new Tweet;
 			$t->id = $row['id'];
+			$t->position = $row['rowid'];
 			$t->time = $row['time'];
 			$t->friend = $row['friend'];
 			$t->status = $row['status'];
@@ -71,6 +78,18 @@ class Tweet
 		}
 
 		return $tweets;
+	}
+
+	static function byPosition($pos)
+	{
+		list($tweet) = self::select("where rowid=$pos limit 1");
+		return $tweet;
+	}
+
+	static function last_read()
+	{
+		list($tweet) = self::select("where isRead = 'yes' order by rowid desc limit 1");
+		return $tweet;
 	}
 
 	static function first_unread()
