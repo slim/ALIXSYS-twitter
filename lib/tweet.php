@@ -132,6 +132,9 @@ class Tweet
 	{
 		$last_tweet = self::last_by_time();
 		$data = json_decode(self::$twitter->OAuthRequest('https://twitter.com/statuses/mentions.json', array(), 'GET'));
+		if (!$data) {
+			return NULL;
+		}
 		return Tweet::load($data, $last_tweet->time);
 	}
 
