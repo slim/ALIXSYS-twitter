@@ -17,7 +17,7 @@ else {
 	$here = $_SERVER['PHP_SELF'] ."?n=$user_name&p=1&". $_SERVER['QUERY_STRING'];
 	Tweet::$table = "timeline_$user_name";
 	Tweet::create_table();
-	header("Location: $here");
+	header("Location: $here", TRUE, 301);
 	die();
 }
 
