@@ -104,8 +104,9 @@ class Tweet
 		return $tweet;
 	}
 
-	static function load($data = array(), $expiration = NULL)
+	static function load($data, $expiration = NULL)
 	{
+		if (!$data) return array();
 		$tweets = array();
 		foreach ($data as $t) {
 			$tweet = new Tweet($t);
