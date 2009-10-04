@@ -86,6 +86,11 @@ class Tweet
 		return $tweet;
 	}
 
+	static function last()
+	{
+		list($tweet) = self::select("order by rowid desc limit 1");
+		return $tweet;
+	}
 	static function last_read()
 	{
 		list($tweet) = self::select("where isRead = 'yes' order by rowid desc limit 1");
