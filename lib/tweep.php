@@ -15,14 +15,16 @@ class Tweep
 
 	static function byName($name)
 	{
-		$tweep = new Tweep($name);
 		$tweep->name = $name;
+		$data = json_decode(@file_get_contents('https://mkais:ghazala2009@twitter.com/users/show.json?'.http_build_query(array('screen_name' => $name))));
+		$tweep = new Tweep($data->id);
 		return $tweep;
 	}
 
 	function load_friends()
 	{
-		$data = json_decode(file_get_contents('https://twitter.com/friends/ids.json?'.http_build_query(array('id' => $this->id))));
+		$data = json_decode(@file_get_contents('https://mkais:ghazala2009@twitter.com/friends/ids.json?'.http_build_query(array('id' => $this->id))));
+		if ($data)
 		foreach ($data as $twid) {
 			$friend = new Tweep($twid);
 			$this->add_friend($friend);
@@ -45,6 +47,7 @@ class Tweep
 			$friend_ids []= $friend->id;
 		}
 		foreach ($this->friends as $friend) {
+			if ($friend->friends)
 			foreach ($friend->friends as $foaf) {
 				if ($foafs[$foaf->id] > 0) {
 					$foafs[$foaf->id]++;
@@ -57,11 +60,13 @@ class Tweep
 		natsort($foafs);
 		$continue = end($foafs);
 		while($continue > 1 && $number > 0 && $continue !== FALSE) {
-			if (!in_array(key($foafs), $friend_ids)) { 
-				$tweeps []= new Tweep(key($foafs));
+			if (key($foafs) != $this->id && !in_array(key($foafs), $friend_ids)) { 
+				$tweep = new Tweep(key($foafs));
+				$tweeps []= $tweep;
+				$tweep->common_friends = current($foafs);
+			$number--;
 			}
 			$continue = prev($foafs);
-			$number--;
 		}
 		return $tweeps;
 	}
