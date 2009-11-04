@@ -38,7 +38,7 @@ class Tweep
 		return $this;
 	}
 
-	function suggest_friends($number = 10)
+	function suggest_friends($number = 10, $connections = 2)
 	{
 		$foafs = array();
 		$tweeps = array();
@@ -59,7 +59,7 @@ class Tweep
 		}
 		natsort($foafs);
 		$continue = end($foafs);
-		while($continue > 1 && $number > 0 && $continue !== FALSE) {
+		while($continue >= $connections && $number > 0 && $continue !== FALSE) {
 			if (key($foafs) != $this->id && !in_array(key($foafs), $friend_ids)) { 
 				$tweep = new Tweep(key($foafs));
 				$tweeps []= $tweep;
