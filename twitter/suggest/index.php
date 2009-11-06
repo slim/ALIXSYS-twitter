@@ -8,20 +8,20 @@
 <script type="text/javascript" src="../js/notification.js" ></script>
 </head>
 <body>
-<label>What's your twitter name? <input id="tweep" type="text" /></label><button onclick="suggest()">Suggest</button>
+<label>What's your twitter names? <textarea id="tweep"></textarea></label><button onclick="suggest()">Suggest</button>
 <div id="faces"></div>
 <div id="message_serveur"></div>
 <script type="text/javascript">
 Notification.area = $('message_serveur');
 function suggest() {
-	new Notification("Ok. I'm doing dome magic. Patience... I'll tell you when I'm finished.");
+	new Notification("Ok. I'm doing some magic. Patience... I'll tell you when I'm finished.");
 	new Ajax.Request("../json/suggest/", {
 		method: "get",
 		parameters: {name: $('tweep').value},
 		onSuccess: function (transport) {
 			var tweeps = transport.responseText.evalJSON();
 			for (var i=0; i < tweeps.length; i++) {
-				var icon = buildom(['P', ['A', {href: "http://twitter.com/users/show.xml?user_id="+tweeps[i].id}, "tweep id "+tweeps[i].id+" has "+tweeps[i].common_friends+" common friends with you"]]);
+				var icon = buildom(['P', ['A', {href: "http://twitter.com/"+tweeps[i].name}, ['IMG', {src: tweeps[i].profile_image_url}], tweeps[i].full_name+" has "+tweeps[i].common_friends+" common friends with you"]]);
 				$("faces").insert(icon);
 			}
 			new Notification("Tadaaa!!");

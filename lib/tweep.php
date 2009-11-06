@@ -21,6 +21,14 @@ class Tweep
 		return $tweep;
 	}
 
+	function load()
+	{
+		$data = json_decode(@file_get_contents('https://mkais:ghazala2009@twitter.com/users/show.json?'.http_build_query(array('user_id' => $this->id))));
+		$this->profile_image_url = $data->profile_image_url;
+		$this->name = $data->screen_name;
+		$this->full_name = $data->name;
+		return $this;
+	}
 	function load_friends()
 	{
 		$data = json_decode(@file_get_contents('https://mkais:ghazala2009@twitter.com/friends/ids.json?'.http_build_query(array('id' => $this->id))));
@@ -64,7 +72,8 @@ class Tweep
 				$tweep = new Tweep(key($foafs));
 				$tweeps []= $tweep;
 				$tweep->common_friends = current($foafs);
-			$number--;
+				$tweep->load();
+					$number--;
 			}
 			$continue = prev($foafs);
 		}
