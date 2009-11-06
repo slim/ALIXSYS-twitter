@@ -15,18 +15,22 @@
 Notification.area = $('message_serveur');
 function suggest() {
 	new Notification("Ok. I'm doing some magic. Patience... I'll tell you when I'm finished.");
-	new Ajax.Request("../json/suggest/", {
-		method: "get",
-		parameters: {name: $('tweep').value},
-		onSuccess: function (transport) {
-			var tweeps = transport.responseText.evalJSON();
-			for (var i=0; i < tweeps.length; i++) {
-				var icon = buildom(['P', ['A', {href: "http://twitter.com/"+tweeps[i].name}, ['IMG', {src: tweeps[i].profile_image_url}], tweeps[i].full_name+" has "+tweeps[i].common_friends+" common friends with you"]]);
-				$("faces").insert(icon);
+	var tweeps = $('tweep').value.split(',');
+	for (var i=0; i < tweeps.length; i++) {
+		var tweep = tweeps[i].replace(/^\s+/g,'').replace(/\s+$/g,'');
+		new Ajax.Request("../json/suggest/", {
+			method: "get",
+			parameters: {name: tweep},
+			onSuccess: function (transport) {
+				var tweeps = transport.responseText.evalJSON();
+				for (var i=0; i < tweeps.length; i++) {
+					var icon = buildom(['P', ['A', {href: "http://twitter.com/"+tweeps[i].name}, ['IMG', {src: tweeps[i].profile_image_url}], tweeps[i].full_name+" has "+tweeps[i].common_friends+" common friends with you"]]);
+					$("faces").insert(icon);
+				}
+				$("faces").insert(buildom(['HR']));
 			}
-			new Notification("Tadaaa!!");
-		}
-	});
+		});
+	}
 }
 </script>
 </body>
