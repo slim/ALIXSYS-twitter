@@ -30,6 +30,26 @@ class Tweet
 		}
 	}
 
+	static function fromSearch($data) {
+		$tweets = array();
+		foreach ($data->results as $r) {
+			$t = new Tweet;
+			$t->id = $r->id;
+			$t->time = date('c', strtotime($r->created_at));
+			$t->status = $r->text;
+			$t->friend = $r->from_user;
+			$tweets []= $t;
+		}
+
+		return $tweets;
+	}
+
+	function reply($text) {
+		$update = array('status' => '@'.$this->friend.' '.$text);
+		$update['in_reply_to_status_id'] = $this->id;
+		self::$twitter->OAuthRequest('https://twitter.com/statuses/update.xml', $update, 'POST');
+	}
+
 	function save()
 	{
 		$table = self::$table;
