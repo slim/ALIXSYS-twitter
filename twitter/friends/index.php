@@ -33,15 +33,16 @@ if (!$tweet instanceof Tweet) {
 	$tweet = Tweet::first_unread();
 }
 
-$fresh_url =  $_SERVER['PHP_SELF'] ."?n=". $_GET['n'] ."&p=". $page ."&k=". $_GET['k'] ."&s=". $_GET['s'];
 if (!$tweet instanceof Tweet) {
+	$last = Tweet::last()->position;
+	$last_url =  $conf['tweet_url'] ."?k=". $_GET['k'] ."&s=". $_GET['s']."&o=". $last ."&n=". $_GET['n'];
+	$fresh_url =  $_SERVER['PHP_SELF'] ."?n=". $_GET['n'] ."&p=". $page ."&k=". $_GET['k'] ."&s=". $_GET['s'];
 	header("Cache-Control: no-cache, must-revalidate");
 	header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
-	die("<html><head><title>tweeps</title></head><body><b>Nothing happened :)</b><br><a href='$fresh_url'>Fresh tweets</a></body></html>");
+	die("<html><head><title>tweeps</title></head><body><b>Nothing happened :)</b><br><a href='$last_url'>Last tweet</a> | <a href='$fresh_url'>Fresh tweets</a></body></html>");
 }
 else {
-	$pos = $tweet->position;
-	$tweet_url =  $conf['tweet_url'] ."?o=". $pos ."&n=". $_GET['n'] ."&k=". $_GET['k'] ."&s=". $_GET['s'];
+	$tweet_url =  $conf['tweet_url'] ."?n=". $_GET['n'] ."&k=". $_GET['k'] ."&s=". $_GET['s'];
 
-	header("Location: $tweet_url");
+	header("Location: $tweet_url", TRUE, 307);
 }
