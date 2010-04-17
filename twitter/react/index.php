@@ -8,7 +8,7 @@
 
 $tweets = Tweet::fromSearch(json_decode(file_get_contents("http://search.twitter.com/search.json?result_type=recent&q=".urlencode($_GET['keyword']))));
 
-print_r($tweets);
+print json_encode($tweets);
 
 foreach ($tweets as $t) {
 	$t->reply($_GET['reply']);
