@@ -6,7 +6,8 @@
 
 	Tweet::$twitter = new TwitterOAuth($conf['consumer_key'], $conf['consumer_secret'], $_GET['k'], $_GET['s']);
 
-$tweets = Tweet::fromSearch(json_decode(file_get_contents("http://search.twitter.com/search.json?result_type=recent&q=".urlencode($_GET['keyword']))));
+$search_url = "http://search.twitter.com/search.json?result_type=recent&q=".urlencode(html_entity_decode($_GET['keyword'],ENT_NOQUOTES,'UTF-8'));
+$tweets = Tweet::fromSearch(json_decode(file_get_contents($search_url)));
 
 print json_encode($tweets);
 
