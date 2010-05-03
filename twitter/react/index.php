@@ -11,6 +11,10 @@ $tweets = Tweet::fromSearch(json_decode(file_get_contents($search_url)));
 
 print json_encode($tweets);
 
+$count = 0;
 foreach ($tweets as $t) {
+	if ($count >= $_GET['count']) break;
+	if ($t->friend == $_GET['exclude']) continue;
 	$t->reply($_GET['reply']);
+	$count++;
 }
