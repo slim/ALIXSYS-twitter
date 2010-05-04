@@ -15,6 +15,7 @@ $count = 0;
 foreach ($tweets as $t) {
 	if ($count >= $_GET['count']) break;
 	if ($t->friend == $_GET['exclude']) continue;
+	if (strpos($t->status, $_GET['exclude'])) continue;
 	$t->reply($_GET['reply']);
 	$count++;
 }
