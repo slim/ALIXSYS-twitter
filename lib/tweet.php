@@ -52,41 +52,49 @@ class Tweet
 
 	function save()
 	{
-		$table = self::$table;
-		$id = $this->id;
-		$time = $this->time;
-		$friend = $this->friend;
-		$status = sqlite_escape_string($this->status);
+		$req = self::$db->prepare("insert into :table (id, time, friend, status, isRead) values (:id, :time, :friend, :status, 'no')");
+		$req->bindValue(':table',self::$table);
+		$req->bindValue(':id',$this->id);
+		$req->bindValue(':time',$this->time);
+		$req->bindValue(':friend',$this->friend);
+		$req->bindValue(':status',sqlite_escape_string($this->status));
 
-		return self::$db->query("insert into $table (id, time, friend, status, isRead) values ('$id', '$time', '$friend', '$status', 'no');");
+		return $req->execute();
 	}
 
 	function mark_as_read()
 	{
-		$table = self::$table;
-		$id = $this->id;
-		$query = "update $table set isRead='yes' where id='$id';";
-		return self::$db->query($query);
+		$query = "update :table set isRead='yes' where id=:id;";
+		$req = self::$db->prepare($query);
+		$req->bindValue(':table',self::$table);
+		$req->bindValue(':id',$this->id);
+
+		return $req->execute();
 	}
 
 	static function mark_all_as_read()
 	{
-		$table = self::$table;
-		$query = "update $table set isRead='yes';";
-		return self::$db->query($query);
+		$query = "update :table set isRead='yes';";
+		$req = self::$db->prepare($query);
+		$req->bindValue(':table',self::$table);
+		$req->bindValue(':id',$this->id);
+
+		return $req->execute();
 	}
 
 	static function sql_select($options)
 	{
 		$table = self::$table;
-		return "select rowid, * from $table $options;";
+		return "select rowid, * from $table $options";
 	}
 
 	static function select($options)
 	{
 		$tweets = array();
 
-		$result = self::$db->query(self::sql_select($options));
+		$query = self::sql_select($options);
+		if (FALSE !== strpos($query, ';')) throw Exception("Yezzi, e7chem!");
+		$result = self::$db->query($query);
 		foreach ($result as $row) {
 			$t = new Tweet;
 			$t->id = $row['id'];
@@ -177,7 +185,9 @@ class Tweet
 
 	static function create_table()
 	{
-		$table = self::$table;
-		return self::$db->query("create table if not exists $table (id primary key, time, friend, status, isRead);");
+		$req = self::$db->prepare("create table if not exists :table (id primary key, time, friend, status, isRead)");
+		$req->bindValue(':table',self::$table);
+
+		return $req->execute();
 	}
 }
