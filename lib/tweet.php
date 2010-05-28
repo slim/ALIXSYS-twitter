@@ -52,8 +52,8 @@ class Tweet
 
 	function save()
 	{
-		$req = self::$db->prepare("insert into :table (id, time, friend, status, isRead) values (:id, :time, :friend, :status, 'no')");
-		$req->bindValue(':table',self::$table);
+		$table = self::$db->quote(self::$table);
+		$req = self::$db->prepare("insert into $table (id, time, friend, status, isRead) values (:id, :time, :friend, :status, 'no')");
 		$req->bindValue(':id',$this->id);
 		$req->bindValue(':time',$this->time);
 		$req->bindValue(':friend',$this->friend);
@@ -64,9 +64,9 @@ class Tweet
 
 	function mark_as_read()
 	{
-		$query = "update :table set isRead='yes' where id=:id;";
+		$table = self::$db->quote(self::$table);
+		$query = "update $table set isRead='yes' where id=:id;";
 		$req = self::$db->prepare($query);
-		$req->bindValue(':table',self::$table);
 		$req->bindValue(':id',$this->id);
 
 		return $req->execute();
@@ -74,17 +74,16 @@ class Tweet
 
 	static function mark_all_as_read()
 	{
-		$query = "update :table set isRead='yes';";
+		$table = self::$db->quote(self::$table);
+		$query = "update $table set isRead='yes';";
 		$req = self::$db->prepare($query);
-		$req->bindValue(':table',self::$table);
-		$req->bindValue(':id',$this->id);
 
 		return $req->execute();
 	}
 
 	static function sql_select($options)
 	{
-		$table = self::$table;
+		$table = self::$db->quote(self::$table);
 		return "select rowid, * from $table $options";
 	}
 
@@ -185,9 +184,7 @@ class Tweet
 
 	static function create_table()
 	{
-		$req = self::$db->prepare("create table if not exists :table (id primary key, time, friend, status, isRead)");
-		$req->bindValue(':table',self::$table);
-
-		return $req->execute();
+		$table = self::$db->quote(self::$table);
+		return self::$db->query("create table if not exists $table (id primary key, time, friend, status, isRead)");
 	}
 }
