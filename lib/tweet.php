@@ -107,6 +107,13 @@ class Tweet
 		return $tweets;
 	}
 
+	static function search($keywords, $limit)
+	{
+		$keywords = "%".strtr($keywords, ' ', '%')."%";
+		$tweets = self::select("where status like '$keywords' order by time desc limit $limit");
+		return $tweets;
+	}
+
 	static function byPosition($pos)
 	{
 		list($tweet) = self::select("where rowid=$pos limit 1");
