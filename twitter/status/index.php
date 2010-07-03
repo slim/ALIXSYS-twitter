@@ -3,7 +3,7 @@
 	$myfriends = $conf['friends_url'] ."?". $_SERVER['QUERY_STRING'];
 	$status = "";
 	if ($_GET['status']) {
-		$status = $_GET['status'];
+		$status = stripslashes($_GET['status']);
 	}
 ?>
 <html>

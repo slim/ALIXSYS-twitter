@@ -57,7 +57,7 @@ class Tweet
 		$req->bindValue(':id',$this->id);
 		$req->bindValue(':time',$this->time);
 		$req->bindValue(':friend',$this->friend);
-		$req->bindValue(':status',sqlite_escape_string($this->status));
+		$req->bindValue(':status',$this->status);
 
 		return $req->execute();
 	}
