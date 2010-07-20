@@ -162,6 +162,12 @@ class Tweet
 		return $tweets;
 	}
 
+	static function load_timeline($page = 1)
+	{
+		$data = json_decode(self::$twitter->OAuthRequest('https://twitter.com/statuses/home_timeline.json', array('page' => $page), 'GET'));
+		return Tweet::load($data);
+	}
+
 	static function load_friends($page = 1)
 	{
 		$data = json_decode(self::$twitter->OAuthRequest('https://twitter.com/statuses/friends.json', array('page' => $page), 'GET'));
