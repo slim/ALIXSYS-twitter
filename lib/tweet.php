@@ -110,7 +110,7 @@ class Tweet
 	static function search($keywords, $limit)
 	{
 		$keywords = "%".strtr($keywords, ' ', '%')."%";
-		$tweets = self::select("where status like '$keywords' order by time desc limit $limit");
+		$tweets = self::select("where status like '$keywords' or friend like '$keywords' order by time desc limit $limit");
 		return $tweets;
 	}
 
