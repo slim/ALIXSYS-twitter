@@ -1,0 +1,26 @@
+body {
+	background-color: #4a7428; 
+}
+li {
+	color: white; 
+	font-size: 48pt;
+	font-family: "fixed";
+	margin-left: 10px;
+}
+li span {
+	font-size: 12pt;
+}
+li span i, li span b {
+	background-color: black;
+}
+#description {
+	font-size: 500%;
+}
+#register {
+    border: 2px outset silver ;
+	padding: 5px 10px;
+	color: black;
+	background-color: lightgrey;
+	text-decoration:none;
+	font-size: 200%;
+}

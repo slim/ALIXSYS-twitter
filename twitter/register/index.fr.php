@@ -1,21 +1,7 @@
 <head>
 <title>ALIXSYS twitter registration</title>
 <style>
-body {
-	background-color: #4a7428; 
-}
-li {
-	color: white; 
-	font-size: 48pt;
-	font-family: "fixed";
-	margin-left: 10px;
-}
-li span {
-	font-size: 12pt;
-}
-li span i, li span b {
-	background-color: black;
-}
+@import url(../alixsys.css);
 </style>
 </head>
 <body>
