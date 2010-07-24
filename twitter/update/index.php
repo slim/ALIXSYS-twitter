@@ -1,14 +1,14 @@
 <?php
+	require "../../ini.php";
+	require_once('../../lib/tweet.php');
 	require_once('../../lib/twitterOAuth.php');
-	$consumer_key = 'JCJZwzwdpgwLKbg3DBtmA';
-	$consumer_secret = 'PmLAZEuyRFOCuh5qLb7aYvQOTpgeFcwQdTfjOdN64c';
+	Tweet::$twitter = new TwitterOAuth($conf['consumer_key'], $conf['consumer_secret'], $_GET['k'], $_GET['s']);
 
 header("Cache-Control: no-cache, must-revalidate");
 header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
 
 $status = stripslashes($_GET['status']);
-$to = new TwitterOAuth($consumer_key, $consumer_secret, $_GET['k'], $_GET['s']);
-$to->OAuthRequest('https://twitter.com/statuses/update.xml', array('status' => $status), 'POST');
+Tweet::update($status);
 ?>
 <html>
 <head>

@@ -50,6 +50,11 @@ class Tweet
 		self::$twitter->OAuthRequest('https://twitter.com/statuses/update.xml', $update, 'POST');
 	}
 
+	function update($text) {
+		$update = array('status' => $text);
+		self::$twitter->OAuthRequest('https://twitter.com/statuses/update.xml', $update, 'POST');
+	}
+
 	function save()
 	{
 		$table = self::$db->quote(self::$table);
