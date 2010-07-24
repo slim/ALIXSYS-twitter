@@ -1,4 +1,5 @@
 <?php
+	require_once('twitterOAuth.php');
 
 class Tweet
 {
@@ -28,6 +29,23 @@ class Tweet
 				$this->id = md5($this->status . $this->time);
 			}
 		}
+	}
+
+	static function oauth($consumer_key, $consumer_secret) {
+		if ($_GET['axk']) {
+			$req = self::$db->prepare("select * from users where id=:id");
+			$req->bindValue(':id',$_GET['axk']);
+			$req->execute();
+			$user = $req->fetch();
+			$k = $user['key'];
+			$s = $user['secret'];
+		}
+		else {
+			$k = $_GET['k'];
+			$s = $_GET['s'];
+		}
+		self::$twitter = new TwitterOAuth($consumer_key, $consumer_secret, $k, $s);
+		return self::$twitter;
 	}
 
 	static function fromSearch($data) {
