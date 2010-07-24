@@ -16,6 +16,6 @@ CODE:
 <p id="description">I am a simple twitter status updater for wap enabled mobiles.</p>
 <a id="register" href="register/">Authenticate with Twitter to obtain a code</a>
 </center>
-<p>by <a href="http://alixsys.com">ALIXSYS</a></p>
+<p id="signature">by <a href="http://alixsys.com">ALIXSYS</a></p>
 </body>
 </html>

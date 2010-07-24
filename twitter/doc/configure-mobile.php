@@ -15,6 +15,7 @@
 	<li><span>Bookmark the status update page</span></li>
 	<li><span>Update your status FTW!</span></li>
 </ol>
+<p id="signature">by <a href="http://alixsys.com">ALIXSYS</a></p>
 </body>
 </html>
 

@@ -14,6 +14,7 @@
 	<li><span>Mettez un signet à la page de status update</span></li>
 	<li><span>Mettez à jour votre statut FTW!</span></li>
 </ol>
+<p id="signature">by <a href="http://alixsys.com">ALIXSYS</a></p>
 </body>
 </html>
 

@@ -11,6 +11,6 @@
 <p id="description">I am a simple Twitter API OAuth proxy.</p>
 <a id="register" href="register/">Authenticate with Twitter to obtain your API code</a>
 </center>
-<p>by <a href="http://alixsys.com">ALIXSYS</a></p>
+<p id="signature">by <a href="http://alixsys.com">ALIXSYS</a></p>
 </body>
 </html>

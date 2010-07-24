@@ -16,6 +16,6 @@ CODE:
 <p id="description">Je suis une simple application de mise a jour de statut twitter pour mobiles compatibles wap.</p>
 <a id="register" href="register/">Authentifiez vous avec Twitter pour obtenir un code</a>
 </center>
-<p>par <a href="http://alixsys.com">ALIXSYS</a></p>
+<p id="signature">by <a href="http://alixsys.com">ALIXSYS</a></p>
 </body>
 </html>

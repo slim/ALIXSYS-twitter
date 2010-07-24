@@ -2,6 +2,9 @@ body {
 	background-color: #4a7428; 
 	color: white;
 }
+h2 {
+	padding-top: 30px;
+}
 a, a:visited {
 	color: yellow;
 }
@@ -42,4 +45,9 @@ code {
 }
 code b {
 	color: yellow;
+}
+#signature {
+	position: fixed;
+	bottom: 3px;
+	right: 10px;
 }
