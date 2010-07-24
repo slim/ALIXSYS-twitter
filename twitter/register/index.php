@@ -21,11 +21,11 @@ $db->query("insert into users (id, key, secret) values ('$code', '". $tok['oauth
 if (strpos($_SERVER['HTTP_ACCEPT_LANGUAGE'], 'fr') !== FALSE) {
 	require "index.fr.php";
 	die();
-}
+} 
 ?>
 <html>
 <head>
-<title>ALIXSYS twitter registration</title>
+<title>ALIXSYS twitter Authenticated</title>
 <style>
 @import url(../alixsys.css);
 </style>
@@ -33,12 +33,10 @@ if (strpos($_SERVER['HTTP_ACCEPT_LANGUAGE'], 'fr') !== FALSE) {
 <body>
 <center style="margin-bottom: 100px">
 <a href="http://alixsys.com"><img src="../png/AliXsys-identite.png" border="0" /></a>
+<p id="description">Congratulations! You are authenticated</p>
 </center>
-<ol>
-	<li><span>Grab your mobile</span></li>
-	<li><span>Go to <b>http://twitter.alixsys.com</b> and enter this code : <b><?php print $code ?></b></span></li>
-	<li><span>Bookmark the status update page</span></li>
-	<li><span>Update your status FTW!</span></li>
-</ol>
+<p><a class="bigbutton" href="../doc/configure-mobile.php?axk=<?php print $code ?>">Setup your mobile phone</a></p>
+or
+<p><a class="bigbutton" href="../doc/api.php?axk=<?php print $code ?>">Use the API</a></p>
 </body>
 </html>

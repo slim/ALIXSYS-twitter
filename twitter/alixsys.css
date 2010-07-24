@@ -1,5 +1,9 @@
 body {
 	background-color: #4a7428; 
+	color: white;
+}
+a, a:visited {
+	color: yellow;
 }
 li {
 	color: white; 
@@ -23,4 +27,19 @@ li span i, li span b {
 	background-color: lightgrey;
 	text-decoration:none;
 	font-size: 200%;
+}
+.bigbutton {
+    border: 2px outset silver ;
+	padding: 5px 10px;
+	color: black;
+	background-color: lightgrey;
+	text-decoration:none;
+	font-size: 200%;
+}
+code {
+	background-color: black;
+	padding: 5px 10px;
+}
+code b {
+	color: yellow;
 }
