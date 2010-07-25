@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>ALIXSYS twitter API</title>
+<title>ALIXSYS twitter API : OAuth proxy bridge</title>
 <style>
 @import url(alixsys.css);
 </style>
