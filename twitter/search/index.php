@@ -18,7 +18,8 @@
 <hr />
 <?php 
 if ($_GET['q']) {
-	$tweets = Tweet::search($_GET['q'], 10);
+	$perpage = $_GET['num'] ? $_GET['num'] : 10;
+	$tweets = Tweet::search($_GET['q'], $perpage);
 	foreach ($tweets as $t) {
 		$friend = $t->friend;
 		$time = $t->time;
